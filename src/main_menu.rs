@@ -1,7 +1,8 @@
 use std::io;
-use crate::player::Player;
+use crate::{global::Global, lobby::lobby};
 
-pub fn main_menu(player: &mut Player) {
+pub fn main_menu(global: &mut Global) {
+    loop {
     println!("
 ░▒▓██████▓▒░░▒▓███████▓▒░░▒▓████████▓▒░▒▓██████▓▒░ ░▒▓███████▓▒░      ░▒▓███████▓▒░░▒▓███████▓▒░ ░▒▓██████▓▒░  
 ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░     ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░             ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░
@@ -18,7 +19,6 @@ pub fn main_menu(player: &mut Player) {
 
     let mut input: String = String::new();
 
-    loop {
         input.clear();
 
         io::stdin()
@@ -26,15 +26,15 @@ pub fn main_menu(player: &mut Player) {
             .expect("Could not read line!");
 
         match input.trim() {
-            "1" => { new_game(player); break; },
-            "2" => { load_game(); break; },
-            "3" => { exit_game(); break; },
+            "1" => { new_game(global); lobby(global); },
+            "2" => { load_game(); lobby(global); },
+            "3" => { exit_game(); lobby(global); },
             _ => println!("Please choose a valid option!"),
         }
     }
 }
 
-pub fn new_game(player: &mut Player) {
+pub fn new_game(global: &mut Global) {
     println!("What is your name?");
 
     let mut input: String = String::new();
@@ -42,7 +42,7 @@ pub fn new_game(player: &mut Player) {
     io::stdin().read_line(&mut input)
     .expect("Could not read line!");
 
-    player.name = input.trim().to_string();    
+    global.player.name = input.trim().to_string();    
 }
 
 pub fn load_game() {
